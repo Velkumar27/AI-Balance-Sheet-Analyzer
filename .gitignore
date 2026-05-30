@@ -1,0 +1,8 @@
+venv/
+.env
+__pycache__/
+*.pyc
+.DS_Store
+*.xlsx
+.faiss_index/
+.faiss_metadata.pkl
