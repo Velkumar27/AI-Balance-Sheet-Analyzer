@@ -3,10 +3,15 @@ import os
 import io
 import json
 import pandas as pd
-from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv(override=True)
+# =====================================================
+# STREAMLIT CLOUD SECRETS CONFIGURATION
+# =====================================================
+if "OPENAI_API_KEY" in st.secrets:
+    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+
+if "OPENAI_MODEL" in st.secrets:
+    os.environ["OPENAI_MODEL"] = st.secrets["OPENAI_MODEL"]
 
 # Set page config FIRST before any other streamlit commands
 st.set_page_config(
@@ -131,15 +136,15 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 # 1. API Configuration Status
-api_key = os.environ.get("OPENAI_API_KEY", "")
-api_key_valid = bool(api_key and "your_openai_api_key" not in api_key and api_key.strip() != "")
+api_key = st.secrets.get("OPENAI_API_KEY", "")
+api_key_valid = bool(api_key.strip())
 
 st.sidebar.subheader("🔑 API Status")
 if api_key_valid:
-    st.sidebar.success("OpenAI API Key loaded from .env")
+    st.sidebar.success("OpenAI API Key loaded from Streamlit Secrets")
 else:
     st.sidebar.error("OpenAI API Key not configured")
-    st.sidebar.info("Please set `OPENAI_API_KEY` in your `.env` file and restart the application.")
+    st.sidebar.info("Please add OPENAI_API_KEY in Streamlit Secrets.")
 
 # 2. File Uploads
 st.sidebar.subheader("📁 Workbook Ingestion")
